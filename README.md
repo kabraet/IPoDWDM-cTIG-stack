@@ -17,17 +17,7 @@ To be installed on your machine.
 ## How to use it?
 `.env` to the root directory exposes environment variables:
 
-* **TELEGRAF_HOST** - agent hostname
-* **INFLUXDB_HOST** - database hostname
-* **INFLUXDB_PORT** - database port
-* **INFLUXDB_DATABASE** - database name
-* **INFLUXDB_ADMIN_USER** - admin user
-* **INFLUXDB_ADMIN_PASSWORD** - admin password
-* **GRAFANA_PORT** - monitoring port
-* **GRAFANA_USER** - monitoring user
-* **GRAFANA_PASSWORD** - monitoring password
-* **GRAFANA_PLUGINS_ENABLED** - enable monitoring plugins
-* **GRAFANA_PLUGINS** - monitoring plugins list (fetch all available plugins if empty)
+![alt text](./docs/image.png)
 
 Modify it according to your needs and build your custom TIG stack:
 

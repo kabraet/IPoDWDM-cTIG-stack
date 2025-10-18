@@ -81,9 +81,9 @@
 
 [[inputs.gnmi]]
 # GNMI subscriptions for Nokia SR-OS TiMOS-C-23.10.R4-1 routers.
-        addresses = ["172.30.150.150:57400"]
-        username = "lab"
-        password = "chello1"
+        addresses = ["${NOKIA_2310_HOST}:${NOKIA_2310_GNMI_PORT}"]
+        username = "${NOKIA_2310_USER}"
+        password = "${NOKIA_2310_PASSWORD}"
         encoding = "json"
         redial = "10s"
 
