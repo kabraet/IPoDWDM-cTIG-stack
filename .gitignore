@@ -1,4 +1,3 @@
 .env
-.history/
 grafana-volume/
 influxdb-volume/
