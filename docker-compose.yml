@@ -1,0 +1,45 @@
+services:
+    influxdb:
+        build: ./influxdb
+        container_name: ${CONTAINER_PREFIX}_influxdb
+        ports:
+            - ${INFLUXDB_HOST_PORT}:${INFLUXDB_CONTAINER_PORT}
+        volumes:
+            - ./influxdb-volume:/var/lib/influxdb
+        restart: always
+        env_file:
+            - .env
+        networks:
+            - backend
+            - frontend
+
+    telegraf:
+        build: ./telegraf
+        container_name: ${CONTAINER_PREFIX}_telegraf
+        links:
+            - influxdb
+        privileged: true
+        restart: always
+        env_file:
+            - .env
+        networks: 
+            - backend
+            
+    grafana:
+        build: ./grafana
+        container_name: ${CONTAINER_PREFIX}_grafana
+        ports: 
+            - ${GRAFANA_HOST_PORT}:${GRAFANA_CONTAINER_PORT}
+        links:
+            - influxdb
+        volumes:
+            - ./grafana-volume:/var/lib/grafana
+        restart: always
+        env_file:
+            - .env
+        networks:
+            - frontend
+
+networks:
+    backend:
+    frontend:
