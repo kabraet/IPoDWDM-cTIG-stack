@@ -24,6 +24,18 @@ services:
             - .env
         networks: 
             - backend
+
+    telegraf2:
+        build: ./telegraf2
+        container_name: ${CONTAINER_PREFIX}_telegraf2
+        links:
+            - influxdb
+        privileged: true
+        restart: always
+        env_file:
+            - .env
+        networks: 
+            - backend
             
     grafana:
         build: ./grafana

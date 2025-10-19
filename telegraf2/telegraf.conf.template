@@ -68,11 +68,17 @@
   username = "${INFLUXDB_ADMIN_USER}"
   password = "${INFLUXDB_ADMIN_PASSWORD}"
 
+###############################################################################
+#                            PROCESSOR PLUGINS                                #
+###############################################################################
+
+[[processors.converter]]
+ [processors.converter.fields]
+   float = ["*"]
 
 ###############################################################################
 #                            INPUT PLUGINS                                    #
 ###############################################################################
-
 
 
 ###############################################################################
@@ -87,21 +93,21 @@
         redial = "60s"
 
     [[inputs.gnmi.subscription]]
-        name = "gNMI-Cisco-IOS-XR-controller-optics-oper:/optics-oper/optics-ports/optics-port/optics-info"
+        name = "gNMI-Float-Cisco-IOS-XR-controller-optics-oper:/optics-oper/optics-ports/optics-port/optics-info"
         origin = "Cisco-IOS-XR-controller-optics-oper"
         path = "/optics-oper/optics-ports/optics-port/optics-info"
         subscription_mode = "sample"
         sample_interval = "60s"
 
     [[inputs.gnmi.subscription]]
-        name = "gNMI-Cisco-IOS-XR-controller-otu-oper:/otu/controllers/controller/info"
+        name = "gNMI-Float-Cisco-IOS-XR-controller-otu-oper:/otu/controllers/controller/info"
         origin = "Cisco-IOS-XR-controller-otu-oper"
         path = "/otu/controllers/controller/info"
         subscription_mode = "sample"
         sample_interval = "60s"
 
     [[inputs.gnmi.subscription]]
-        name = "gNMI-Cisco-IOS-XR-infra-statsd-oper/infra-statistics/interfaces/interface/generic-counters"
+        name = "gNMI-Float-Cisco-IOS-XR-infra-statsd-oper/infra-statistics/interfaces/interface/generic-counters"
         origin = "Cisco-IOS-XR-infra-statsd-oper"
         path = "/infra-statistics/interfaces/interface/generic-counters"
         subscription_mode = "sample"
@@ -118,12 +124,34 @@
 # port c28
 
         [[inputs.gnmi.subscription]]
-                name = "nokia_port_string"
-                path = "/state/port[port-id=1/1/c28]"
+                name = "nokia_port_ethernet_statistics"
+                path = "/state/port[port-id=1/1/c28/1]/ethernet/statistics"
+                subscription_mode = "sample"
+                sample_interval = "10s"
+
+        [[inputs.gnmi.subscription]]
+                name = "nokia_port_dwdm"
+                path = "/state/port[port-id=1/1/c28]/dwdm"
+                subscription_mode = "sample"
+                sample_interval = "30s"
+
+        [[inputs.gnmi.subscription]]
+                name = "nokia_port_transceiver"
+                path = "/state/port[port-id=1/1/c28]/transceiver"
+                subscription_mode = "sample"
+                sample_interval = "30s"
+
+        [[inputs.gnmi.subscription]]
+                name = "nokia_port_configure"
+                path = "/configure/port[port-id=1/1/c28]/"
                 subscription_mode = "sample"
                 sample_interval = "60s"
 
-
+        [[inputs.gnmi.subscription]]
+                name = "nokia_port_ethernet"
+                path = "/state/port[port-id=1/1/c28/1]/ethernet"
+                subscription_mode = "sample"
+                sample_interval = "60s"
 
 
 
