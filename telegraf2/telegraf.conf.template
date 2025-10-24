@@ -1,18 +1,11 @@
 # Telegraf Configuration
 
 [global_tags]
-  # dc = "us-east-1" # will tag all metrics with dc=us-east-1
-  # rack = "1a"
-  ## Environment variables can be used as tags, and throughout the config file
-  # user = "$USER"
-
 
 # Configuration for telegraf agent
 [agent]
-  ## Default data collection interval for all inputs
-  interval = "5s"
-  ## Rounds collection interval to 'interval'
-  ## ie, if interval="10s" then always collect on :00, :10, :20, etc.
+   interval = "5s"
+
   round_interval = true
 
   ## Telegraf will send metrics to outputs in batches of at
@@ -72,9 +65,22 @@
 #                            PROCESSOR PLUGINS                                #
 ###############################################################################
 
+[[processors.starlark]]
+  source = '''
+def apply(metric):
+    new_fields = {}
+    for k, v in metric.fields.items():
+        new_name = k.replace("-", "_").replace("/", "_")
+        new_fields[new_name] = v
+    metric.fields.clear()
+    for k, v in new_fields.items():
+        metric.fields[k] = v
+    return [metric]
+  '''
 [[processors.converter]]
  [processors.converter.fields]
    float = ["*"]
+
 
 ###############################################################################
 #                            INPUT PLUGINS                                    #
@@ -86,32 +92,32 @@
 ###############################################################################
 
 [[inputs.gnmi]]
-        addresses = ["172.30.150.130:57400"]
-        username = "cisco"
-        password = "cisco123"
+        addresses = ["${CISCO_2441_HOST}:${CISCO_2441_GNMI_PORT}"]
+        username = "${CISCO_2441_USER}"
+        password = "${CISCO_2441_PASSWORD}"
         encoding = "json"
         redial = "60s"
 
     [[inputs.gnmi.subscription]]
-        name = "gNMI-Float-Cisco-IOS-XR-controller-optics-oper:/optics-oper/optics-ports/optics-port/optics-info"
+        name = "cisco_port_dwdm_port_float"
         origin = "Cisco-IOS-XR-controller-optics-oper"
         path = "/optics-oper/optics-ports/optics-port/optics-info"
         subscription_mode = "sample"
         sample_interval = "60s"
 
     [[inputs.gnmi.subscription]]
-        name = "gNMI-Float-Cisco-IOS-XR-controller-otu-oper:/otu/controllers/controller/info"
+        name = "cisco_port_dwdm_controller_float"
         origin = "Cisco-IOS-XR-controller-otu-oper"
         path = "/otu/controllers/controller/info"
         subscription_mode = "sample"
         sample_interval = "60s"
 
     [[inputs.gnmi.subscription]]
-        name = "gNMI-Float-Cisco-IOS-XR-infra-statsd-oper/infra-statistics/interfaces/interface/generic-counters"
+        name = "cisco_port_ethernet_statistics_float"
         origin = "Cisco-IOS-XR-infra-statsd-oper"
         path = "/infra-statistics/interfaces/interface/generic-counters"
         subscription_mode = "sample"
-        sample_interval = "300s"
+        sample_interval = "60s"
 
 [[inputs.gnmi]]
 # GNMI subscriptions for Nokia SR-OS TiMOS-C-23.10.R4-1 routers.
@@ -127,7 +133,7 @@
                 name = "nokia_port_ethernet_statistics"
                 path = "/state/port[port-id=1/1/c28/1]/ethernet/statistics"
                 subscription_mode = "sample"
-                sample_interval = "10s"
+                sample_interval = "60s"
 
         [[inputs.gnmi.subscription]]
                 name = "nokia_port_dwdm"

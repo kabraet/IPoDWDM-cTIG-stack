@@ -68,6 +68,26 @@
   username = "${INFLUXDB_ADMIN_USER}"
   password = "${INFLUXDB_ADMIN_PASSWORD}"
 
+###############################################################################
+#                            PROCESSOR PLUGINS                                #
+###############################################################################
+
+# ====================================
+# PROCESSOR: Rename all field keys
+# ====================================
+
+[[processors.starlark]]
+  source = '''
+def apply(metric):
+    new_fields = {}
+    for k, v in metric.fields.items():
+        new_name = k.replace("-", "_").replace("/", "_")
+        new_fields[new_name] = v
+    metric.fields.clear()
+    for k, v in new_fields.items():
+        metric.fields[k] = v
+    return [metric]
+  '''
 
 ###############################################################################
 #                            INPUT PLUGINS                                    #
@@ -80,32 +100,32 @@
 ###############################################################################
 
 [[inputs.gnmi]]
-        addresses = ["172.30.150.130:57400"]
-        username = "cisco"
-        password = "cisco123"
+        addresses = ["${CISCO_2441_HOST}:${CISCO_2441_GNMI_PORT}"]
+        username = "${CISCO_2441_USER}"
+        password = "${CISCO_2441_PASSWORD}"
         encoding = "json"
         redial = "60s"
 
     [[inputs.gnmi.subscription]]
-        name = "gNMI-Cisco-IOS-XR-controller-optics-oper:/optics-oper/optics-ports/optics-port/optics-info"
+        name = "cisco_port_dwdm_port"
         origin = "Cisco-IOS-XR-controller-optics-oper"
         path = "/optics-oper/optics-ports/optics-port/optics-info"
         subscription_mode = "sample"
         sample_interval = "60s"
 
     [[inputs.gnmi.subscription]]
-        name = "gNMI-Cisco-IOS-XR-controller-otu-oper:/otu/controllers/controller/info"
+        name = "cisco_port_dwdm_controller"
         origin = "Cisco-IOS-XR-controller-otu-oper"
         path = "/otu/controllers/controller/info"
         subscription_mode = "sample"
         sample_interval = "60s"
 
     [[inputs.gnmi.subscription]]
-        name = "gNMI-Cisco-IOS-XR-infra-statsd-oper/infra-statistics/interfaces/interface/generic-counters"
+        name = "cisco_port_ethernet_statistics"
         origin = "Cisco-IOS-XR-infra-statsd-oper"
         path = "/infra-statistics/interfaces/interface/generic-counters"
         subscription_mode = "sample"
-        sample_interval = "300s"
+        sample_interval = "60s"
 
 [[inputs.gnmi]]
 # GNMI subscriptions for Nokia SR-OS TiMOS-C-23.10.R4-1 routers.
@@ -113,7 +133,7 @@
         username = "${NOKIA_2310_USER}"
         password = "${NOKIA_2310_PASSWORD}"
         encoding = "json"
-        redial = "10s"
+        redial = "60s"
 
 # port c28
 

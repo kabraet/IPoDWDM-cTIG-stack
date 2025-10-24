@@ -1,4 +1,4 @@
-FROM influxdb:1.11
+FROM influxdb:1.12.2
 
 LABEL author="Kamiel Braet <kamiel.braet@outlook.com>"
 LABEL version="1.0.0"

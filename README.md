@@ -7,10 +7,10 @@
 ![Docker dashboard](./docs/Nokia-DWDM-Plug-Dashboard.PNG?raw=true "Nokia dashboard")
 
 ## Requirements
-As docker images, TIG stack needs:
+As docker images, cTIG stack needs:
 
-* docker v18.* at least
-* docker-compose v1.2* at least
+* docker v28.* at least
+* docker-compose v2.36.* at least
 
 To be installed on your machine.
 

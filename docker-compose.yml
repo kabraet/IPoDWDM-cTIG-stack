@@ -38,7 +38,16 @@ services:
             - backend
             
     grafana:
-        build: ./grafana
+        build: 
+          context: ./grafana
+          args:
+            INFLUXDB_CONTAINER_PORT: ${INFLUXDB_CONTAINER_PORT}
+            INFLUXDB_HOST: ${INFLUXDB_HOST}
+            INFLUXDB_ADMIN_USER: ${INFLUXDB_ADMIN_USER}
+            INFLUXDB_ADMIN_PASSWORD: ${INFLUXDB_ADMIN_PASSWORD}
+            INFLUXDB_DATABASE: ${INFLUXDB_DATABASE}
+            GRAFANA_USER: ${GRAFANA_USER}
+            GRAFANA_PASSWORD: ${GRAFANA_PASSWORD}
         container_name: ${CONTAINER_PREFIX}_grafana
         ports: 
             - ${GRAFANA_HOST_PORT}:${GRAFANA_CONTAINER_PORT}
