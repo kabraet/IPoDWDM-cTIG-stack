@@ -1,3 +1,5 @@
+# WORK IN PROGRESS NOT SUITABLE FOR GENERAL USAGE
+
 # IPoDWDM plug monitoring stack (Telegraf/InfluxDB/Grafana)
 [Telegraf](https://www.influxdata.com/time-series-platform/telegraf/) is a plugin-driven server agent for collecting and reporting metrics.  
 [InfluxDB](https://www.influxdata.com/time-series-platform/influxdb/) handle massive amounts of time-stamped information.  
